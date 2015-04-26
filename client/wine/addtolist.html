@@ -1,0 +1,51 @@
+<template name="addtolist">
+
+<div class="add-wine">	
+	<form id="add-wine-form" action="action">
+		<div class="form-group">
+			<div>
+				<h2>{{nameOf winery}}</h2>
+				<h3>{{label}} {{vintage}}</h3>
+			</div>
+			
+			<input type="hidden" id="wineId" name="wineId" value="{{_id}}" />
+			
+			<label for="acquired" class="control-label">Date Acquired</label>
+			<div class="input-group datetimepicker">
+				<input class="set-due-date form-control" type="text" name="acquired" placeholder="The date you acquired" />
+				<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+			</div>
+			
+			<label for="from" class="control-label">Acquired By</label>
+			<select id="from" name="from" class="form-control">
+				<option value="1">Purchase</option>
+				<option value="2">Gift</option>
+			</select>
+			
+			{{#if purchase}}
+			<label for="source" class="control-label">Source</label>
+			<input class="form-control" type="text" name="source" placeholder="Where did you purchase this wine from?" />
+			
+			<label for="price" class="control-label">Price Paid</label>
+			<input class="set-due-date form-control" type="text" name="price" placeholder="The price you paid" />
+			{{/if}}
+			{{#if gift}}
+			<label for="source" class="control-label">From</label>
+			<input class="form-control" type="text" name="source" placeholder="Who gifted this wine to you?" />
+			{{/if}}
+			
+			<label for="quantity" class="control-label">Quantity</label>
+			<input class="form-control" type="text" name="quantity" placeholder="How many bottles do you have?" />
+			
+			<label for="savedate" class="control-label">Save For Date</label>
+			<div class="input-group datetimepicker">
+				<input class="set-due-date form-control" type="text" name="savedate" placeholder="When do you plan on drinking it?" />
+				<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+			</div>
+			<p><i>If you enter a date here, this wine will be excluded from any match recommendations until the date is reached.</i></p>
+			
+			<input type="submit" id="add-wine" value="Add To Cellar" class="btn btn-primary" />
+		</div>	
+	</form>
+</div>
+</template>
