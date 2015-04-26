@@ -98,7 +98,7 @@ p.errorCode {
 	margin-top: 22px;
 }
 
-.table tbody tr td.center
+.table tbody tr td.center, .table tbody tr th.center
 {
 	text-align: center;
 }

@@ -49,7 +49,7 @@ if (Meteor.isClient) {
             event.preventDefault();
 			
 			var qty = parseInt(this.quantity) - 1;			
-			if (qty <= 0) {
+			if (!qty || qty < 0) {
 				Cellars.remove(this._id);
 			} else {
 				Cellars.update({_id: this._id}, {$set: {quantity: qty}});
