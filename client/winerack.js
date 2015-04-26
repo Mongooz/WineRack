@@ -4,8 +4,10 @@ if (Meteor.isClient) {
             return Wines.find({});
         },
 		nameOf: function(id) {
-			if (id)
-				return Wineries.findOne(id).name;
+			if (id) {
+				var winery = Wineries.findOne(id);
+				if (winery) return winery.name;
+			}
 		},
 		inCellar: function(id) {
 			if (id)
@@ -63,7 +65,9 @@ if (Meteor.isClient) {
   });
   
 	
-	Template.winelist.rendered = function() {
+	Template.winelist.onRendered(function() {
+		if (!Meteor.user()) return;
+		
 		var token = Meteor.user().services.facebook.accessToken;
 		Meteor.call('fetchFromService', token, function(err, respJson) {
 			if(err) {
@@ -72,5 +76,12 @@ if (Meteor.isClient) {
 				Session.set("friends", respJson.data);
 			}
 		});
-	};
+	});
+	
+	Template.landing.helpers({
+		checkLogin: function(friend) {
+			if (Meteor.userId())
+				Router.go('home');
+		}
+	});
 }
