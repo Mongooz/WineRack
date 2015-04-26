@@ -1,4 +1,13 @@
 <template name="notFound">
-	<h2>I looked really hard...</h2>
-	<p>But I couldn't find what you asked for...</p>
+<div class="jumbotron main-content row">
+	<div class="col-sm-6">
+		<p class="errorCode">404</p>
+	</div>
+	<div class="col-sm-6">
+		<h2>I looked really hard...</h2>
+		<p>But I couldn't find what you asked for.</p>
+		<p>I hate to point the finger, but it's probably your fault.</p>
+		<p>Return to the <a href="{{pathFor 'home'}}">home page</a> and try not to do that again.</p>
+	</div>
+</div>
 </template>

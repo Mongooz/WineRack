@@ -91,7 +91,12 @@ label {
 	color: black;
 }
 
-
+p.errorCode {
+	font-size: 72pt;
+	text-align: center;
+	text-shadow: 4px 4px 5px rgba(0,0,0,0.9);
+	margin-top: 22px;
+}
 
 #tag-cloud {
 	padding-left: 0px;
