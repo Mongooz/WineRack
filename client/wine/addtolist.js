@@ -1,7 +1,8 @@
 if (Meteor.isClient) {
 	
 	Template.addtolist.onRendered(function() {
-		this.$('.datetimepicker').datetimepicker( { format: "DD/MM/YYYY" } );
+		this.$('.pastDatePicker').datetimepicker( { format: "DD/MM/YYYY", maxDate: new Date() } );
+		this.$('.futureDatePicker').datetimepicker( { format: "DD/MM/YYYY", minDate: new Date() } );
 	});
 	
 	Template.addtolist.helpers({
@@ -36,12 +37,16 @@ if (Meteor.isClient) {
 		"submit form": function (event) {
             event.preventDefault();
 			
+			var price;
+			if (event.target.price) {
+				price = event.target.price;
+			}
             Cellars.insert({
                 user: Meteor.userId(),
                 wine: event.target.wineId.value,
 				acquired: event.target.acquired.value,
 				from: event.target.from.value,
-				price: event.target.price.value,
+				price: price,
 				source: event.target.source.value,
 				savedate: event.target.savedate.value
             });
