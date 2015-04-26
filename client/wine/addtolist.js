@@ -39,7 +39,7 @@ if (Meteor.isClient) {
 			
 			var price;
 			if (event.target.price) {
-				price = event.target.price;
+				price = event.target.price.value;
 			}
             Cellars.insert({
                 user: Meteor.userId(),
