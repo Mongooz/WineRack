@@ -41,7 +41,26 @@ if (Meteor.isClient) {
 			if (from == 2)
 				return "Gift";
 			return "Purchase";
+		}
+    });
+	
+	Template.cellar.events({
+		"click .takeFromCellar": function (event) {
+            event.preventDefault();
+			
+			var qty = parseInt(this.quantity) - 1;			
+			if (qty <= 0) {
+				Cellars.remove(this._id);
+			} else {
+				Cellars.update({_id: this._id}, {$set: {quantity: qty}});
+			}
 		},
+		"click .addToCellar": function (event) {
+            event.preventDefault();
+			
+			var qty = parseInt(this.quantity) + 1;
+            Cellars.update({_id: this._id}, {$set: {quantity: qty}});
+		}
     });
 	
 	Template.friend.helpers({

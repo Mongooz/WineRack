@@ -98,6 +98,11 @@ p.errorCode {
 	margin-top: 22px;
 }
 
+.table tbody tr td.center
+{
+	text-align: center;
+}
+
 #tag-cloud {
 	padding-left: 0px;
 }
