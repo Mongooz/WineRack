@@ -77,16 +77,14 @@
 	<div class="table-responsive">
         <table class="table">
 			<tbody>
-			<tr><th>Winery</th><th>Label</th><th>Vintage</th><th>Acquired By</th><th>Price Paid</th><th>Source</th><th></th></tr>
+			<tr><th>Wine</th><th>Acquired By</th><th>Price Paid</th><th>Source</th><th colspan="3">Quantity</th></tr>
 			{{#each this}}
 				<tr>
 					{{#with getWine wine}}
-					<td>{{nameOf winery}}</td><td>{{label}}</td><td>{{vintage}}</td>
+					<td>{{nameOf winery}} {{label}} {{vintage}}</td>
 					{{/with}}
 					
-					<td>{{fromName from}}</td><td>{{price}}</td><td>{{source}}</td>
-					
-					<td><a href="{{pathFor 'home' _id=this._id}}">Remove</a></td>
+					<td>{{fromName from}}</td><td>{{price}}</td><td>{{source}}</td><td class="center"><button class="btn-primary glyphicon-minus takeFromCellar"></button></td><td class="center">{{quantity}}</td><td class="center"><button class="btn-primary glyphicon-plus addToCellar"></button></td>
 				</tr>
 			{{/each}}
 			</tbody>

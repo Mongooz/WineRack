@@ -48,6 +48,7 @@ if (Meteor.isClient) {
 				from: event.target.from.value,
 				price: price,
 				source: event.target.source.value,
+				quantity: event.target.quantity.value,
 				savedate: event.target.savedate.value
             });
 			
