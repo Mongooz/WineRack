@@ -16,7 +16,7 @@ Meteor.methods({
 			wineryId = wineryRecord._id;
 		}
 		
-		var wineRecord = Wines.findOne({winery: wineryId, name: wine.label, vintage: wine.vintage});
+		var wineRecord = Wines.findOne({winery: wineryId, label: wine.label, vintage: wine.vintage});
 		var wineId;
 		if (!wineRecord) {
 			wineId = Wines.insert({
@@ -25,8 +25,7 @@ Meteor.methods({
 				winery: wineryId});
 		} else {
 			wineId = wineRecord._id;
-		}
-		
+		}		
 		return wineId;
 	},
 	
