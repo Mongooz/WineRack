@@ -48,18 +48,14 @@ if (Meteor.isClient) {
 		"click .takeFromCellar": function (event) {
             event.preventDefault();
 			
-			var qty = parseInt(this.quantity) - 1;			
-			if (!qty || qty < 0) {
-				Cellars.remove(this._id);
-			} else {
-				Cellars.update({_id: this._id}, {$set: {quantity: qty}});
-			}
+			var qty = parseInt(this.quantity) - 1;
+			Meteor.call("updateQuantity", this._id, qty);
 		},
 		"click .addToCellar": function (event) {
             event.preventDefault();
 			
 			var qty = parseInt(this.quantity) + 1;
-            Cellars.update({_id: this._id}, {$set: {quantity: qty}});
+			Meteor.call("updateQuantity", this._id, qty);
 		}
     });
 	
