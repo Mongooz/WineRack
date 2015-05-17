@@ -16,6 +16,12 @@
 				<option value="2">Gift</option>
 			</select>
 			
+			<label for="acquired" class="control-label">Date Acquired</label>
+			<div class="input-group datetimepicker">
+				<input class="set-due-date form-control" type="text" name="acquired" placeholder="The date you acquired" />
+				<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+			</div>
+			
 			{{#if purchase}}
 			<label for="source" class="control-label">Source</label>
 			<input class="form-control" type="text" name="source" placeholder="Where did you purchase this wine from?" />
