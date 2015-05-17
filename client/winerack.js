@@ -1,4 +1,10 @@
 if (Meteor.isClient) {
+	Accounts.ui.config({
+	  requestPermissions: {
+	    facebook: ['user_friends']
+	  }
+	});
+	
 	Template.winelist.helpers({
 		wines: function () {
             return Wines.find({});

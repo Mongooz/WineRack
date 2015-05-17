@@ -3,6 +3,8 @@ if (Meteor.isClient) {
         "submit form": function (event) {
             event.preventDefault();
 			
+			if (!validateForm()) return;
+			
 			var wineId = Meteor.call("createWine", {
 				winery: event.target.winery.value, 
 				label: event.target.label.value,
