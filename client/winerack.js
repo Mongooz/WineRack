@@ -21,6 +21,7 @@ if (Meteor.isClient) {
 			if (id) {
 				var cellars = Cellars.find({wine: id, user: {$ne: Meteor.userId()}}).map(function(it) { return it.user });
 				if (cellars) {
+					return Meteor.users.find({"_id": {$in: cellars }});
 				}
 			}
 		},
