@@ -2,19 +2,21 @@
 <div class="create-wine">
 	<form id="create-wine-form" action="action">
 		<div class="form-group">
+			<p>{{fromId}}</p>
+			
 			<label for="winery" class="control-label">Winery</label>
 			<input class="form-control typeahead required" name="winery" id="winery" type="text"
 			   placeholder="The name of the winery" autocomplete="off" spellcheck="off"
-			   data-source="wineries" />
+			   data-source="wineries" value="{{nameOf winery}}" />
 			   
 			<label for="label" class="control-label">Label</label>
 			<input class="form-control typeahead required" name="label" type="text"
 			   placeholder="The label of the wine" autocomplete="off" spellcheck="off"
-			   data-source="wines" />
+			   data-source="wines" value="{{label}}" />
 			
 			<label for="vintage" class="control-label">Vintage</label>
 			<div class="input-group pastYearPicker">
-				<input class="set-due-date form-control required" type="text" name="vintage" placeholder="The vintage year of the wine" />
+				<input class="set-due-date form-control required" type="text" name="vintage" placeholder="The vintage year of the wine" value="{{vintage}}" />
 				<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
 			</div>
 			

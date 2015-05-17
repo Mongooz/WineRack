@@ -56,5 +56,16 @@ Meteor.methods({
 		} else {
 			Cellars.update({_id: id}, {$set: {quantity: quantity}});
 		}
+	},
+	
+	updateWine: function(id, wine) {
+		var inCellars = Cellars.find({wine: id});
+		if (inCellars.count() > 1) {
+			var error = "This wine is locked, as it is in use by someone else. Consider <a href='/create?fromId="+id+"'>creating a new wine</a> if this one is incorrect for your cellar.";
+			Flash.danger(error);
+			throw Meteor.Error(error);
+		}
+		
+		Wines.update({_id: id}, {$set: {label: wine.label, vintage: wine.vintage}});
 	}
 })
