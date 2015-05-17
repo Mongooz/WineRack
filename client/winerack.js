@@ -32,6 +32,14 @@ if (Meteor.isClient) {
 		}
     });
 	
+	Template.ratings.helpers({
+		ratingCount: function(id) {
+			if (id) {
+				return Ratings.find({wine: id}).count();
+			}
+		}
+	})
+	
 	Template.cellar.helpers({
 		nameOf: function(id) {
 			if (id)
