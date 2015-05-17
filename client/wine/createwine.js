@@ -57,6 +57,14 @@ if (Meteor.isClient) {
 		},
 		consumed: function() {
 			return Session.get("consumed");
+		},
+		nameOf: function(id) {
+			if (id) {
+				var winery = Wineries.findOne(id);
+				if (winery) {
+					return winery.name;
+				}
+			}
 		}
 	});
 }

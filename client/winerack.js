@@ -62,7 +62,14 @@ if (Meteor.isClient) {
 			
 			var qty = parseInt(this.quantity) + 1;
 			Meteor.call("updateQuantity", this._id, qty);
-		}
+		},
+		"click .update": function (event) {
+			var container = $(event.target).parents('.modal-content');
+			var label = container.find('input[name=label]')[0].value;
+			var vintage = container.find('input[name=vintage]')[0].value;
+			
+			Meteor.call("updateWine", this._id, { label: label, vintage: vintage });
+		},
     });
 	
 	Template.friend.helpers({
