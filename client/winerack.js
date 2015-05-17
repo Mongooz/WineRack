@@ -19,11 +19,8 @@ if (Meteor.isClient) {
 		},
 		inFriendsCellar: function(id) {
 			if (id) {
-				if (Session.get("friends")){
-					var cellars = Cellars.find({wine: id}).map(function(it) { return it.user });
-					if (cellars) {
-						return Meteor.users.find({"services.facebook.id": { $in: Session.get("friends").map(function (it) { return it.id }) }, "_id": {$in: cellars }});
-					}
+				var cellars = Cellars.find({wine: id, user: {$ne: Meteor.userId()}}).map(function(it) { return it.user });
+				if (cellars) {
 				}
 			}
 		},
