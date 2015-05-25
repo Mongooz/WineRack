@@ -1,4 +1,10 @@
 if (Meteor.isClient) {
+	Accounts.ui.config({
+	  requestPermissions: {
+	    facebook: ['user_friends']
+	  }
+	});
+	
 	Template.winelist.helpers({
 		wines: function () {
             return Wines.find({});
@@ -13,11 +19,9 @@ if (Meteor.isClient) {
 		},
 		inFriendsCellar: function(id) {
 			if (id) {
-				if (Session.get("friends")){
-					var cellars = Cellars.find({wine: id}).map(function(it) { return it.user });
-					if (cellars) {
-						return Meteor.users.find({"services.facebook.id": { $in: Session.get("friends").map(function (it) { return it.id }) }, "_id": {$in: cellars }});
-					}
+				var cellars = Cellars.find({wine: id, user: {$ne: Meteor.userId()}}).map(function(it) { return it.user });
+				if (cellars) {
+					return Meteor.users.find({"_id": {$in: cellars }});
 				}
 			}
 		},
@@ -48,19 +52,22 @@ if (Meteor.isClient) {
 		"click .takeFromCellar": function (event) {
             event.preventDefault();
 			
-			var qty = parseInt(this.quantity) - 1;			
-			if (!qty || qty < 0) {
-				Cellars.remove(this._id);
-			} else {
-				Cellars.update({_id: this._id}, {$set: {quantity: qty}});
-			}
+			var qty = parseInt(this.quantity) - 1;
+			Meteor.call("updateQuantity", this._id, qty);
 		},
 		"click .addToCellar": function (event) {
             event.preventDefault();
 			
 			var qty = parseInt(this.quantity) + 1;
-            Cellars.update({_id: this._id}, {$set: {quantity: qty}});
-		}
+			Meteor.call("updateQuantity", this._id, qty);
+		},
+		"click .update": function (event) {
+			var container = $(event.target).parents('.modal-content');
+			var label = container.find('input[name=label]')[0].value;
+			var vintage = container.find('input[name=vintage]')[0].value;
+			
+			Meteor.call("updateWine", this._id, { label: label, vintage: vintage });
+		},
     });
 	
 	Template.friend.helpers({

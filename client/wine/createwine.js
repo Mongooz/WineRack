@@ -2,26 +2,16 @@ if (Meteor.isClient) {
 	Template.createwine.events({
         "submit form": function (event) {
             event.preventDefault();
-			var wineryRecord = Wineries.findOne({name:event.target.winery.value});
-			var wineryId;
-			if (!wineryRecord) {
-				wineryId = Wineries.insert({name:event.target.winery.value});
-			} else {
-				wineryId = wineryRecord._id;
-			}
 			
-			var wineRecord = Wines.findOne({winery: wineryId, name: event.target.label.value, vintage: event.target.vintage.value});
-			var wineId;
-			if (!wineRecord) {
-				wineId = Wines.insert({
-                label: event.target.label.value,
-                vintage: event.target.vintage.value,
-                winery: wineryId});
-			} else {
-				wineId = wineRecord._id;
-			}
-            
-			Router.go('addtolist', {_id: wineId});
+			if (!validateForm()) return;
+			
+			var wineId = Meteor.call("createWine", {
+				winery: event.target.winery.value, 
+				label: event.target.label.value,
+				vintage: event.target.vintage.value},
+				function(error, result) {
+					Router.go('addtolist', {_id: result});
+				});
 		},
 		"change #from": function (event) {
 			Session.set("from", event.target.value)
@@ -67,6 +57,14 @@ if (Meteor.isClient) {
 		},
 		consumed: function() {
 			return Session.get("consumed");
+		},
+		nameOf: function(id) {
+			if (id) {
+				var winery = Wineries.findOne(id);
+				if (winery) {
+					return winery.name;
+				}
+			}
 		}
 	});
 }

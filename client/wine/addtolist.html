@@ -10,24 +10,27 @@
 			
 			<input type="hidden" id="wineId" name="wineId" value="{{_id}}" />
 			
-			<label for="acquired" class="control-label">Date Acquired</label>
-			<div class="input-group pastDatePicker">
-				<input class="set-due-date form-control" type="text" name="acquired" placeholder="The date you acquired" />
-				<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-			</div>
-			
 			<label for="from" class="control-label">Acquired By</label>
 			<select id="from" name="from" class="form-control">
 				<option value="1">Purchase</option>
 				<option value="2">Gift</option>
 			</select>
 			
+			<label for="acquired" class="control-label">Date Acquired</label>
+			<div class="input-group datetimepicker">
+				<input class="set-due-date form-control" type="text" name="acquired" placeholder="The date you acquired" />
+				<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+			</div>
+			
 			{{#if purchase}}
 			<label for="source" class="control-label">Source</label>
 			<input class="form-control" type="text" name="source" placeholder="Where did you purchase this wine from?" />
 			
 			<label for="price" class="control-label">Price Paid</label>
-			<input class="set-due-date form-control" type="text" name="price" placeholder="The price you paid" />
+			<div class="input-group">
+				<span class="input-group-addon"><i class="glyphicon glyphicon-usd"></i></span>
+				<input class="set-due-date form-control" type="text" name="price" placeholder="How much did you pay per bottle" />
+			</div>
 			{{/if}}
 			{{#if gift}}
 			<label for="source" class="control-label">From</label>
@@ -35,7 +38,7 @@
 			{{/if}}
 			
 			<label for="quantity" class="control-label">Quantity</label>
-			<input class="form-control" type="number" name="quantity" placeholder="How many bottles do you have?" value="1" />
+			<input class="form-control required" type="number" name="quantity" placeholder="How many bottles do you have?" value="1" />
 			
 			<label for="savedate" class="control-label">Save For Date</label>
 			<div class="input-group futureDatePicker">
@@ -43,6 +46,10 @@
 				<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
 			</div>
 			<p><i>If you enter a date here, this wine will be excluded from any match recommendations until the date is reached.</i></p>
+			
+			<label for="notes" class="control-label">Notes</label>
+			<textarea class="form-control" rows="4" name="notes" placeholder="Add any notes you would like to keep for this wine"></textarea>
+			<p><i>Any information you put here will be kept private, and will only be visible to users that you have invited to join your cellar.</i></p>
 			
 			<input type="submit" id="add-wine" value="Add To Cellar" class="btn btn-primary" />
 		</div>	

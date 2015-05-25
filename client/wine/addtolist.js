@@ -41,7 +41,7 @@ if (Meteor.isClient) {
 			if (event.target.price) {
 				price = event.target.price.value;
 			}
-            Cellars.insert({
+            Meteor.call("addToList", {
                 user: Meteor.userId(),
                 wine: event.target.wineId.value,
 				acquired: event.target.acquired.value,
