@@ -7,7 +7,7 @@ if (Meteor.isClient) {
 	
 	Template.winelist.helpers({
 		wines: function () {
-            return Wines.find({});
+			return Wines.find({});
         },
 		nameOf: function(id) {
 			if (id)
@@ -31,6 +31,14 @@ if (Meteor.isClient) {
 			}
 		}
     });
+	
+	Template.ratings.helpers({
+		ratingCount: function(id) {
+			if (id) {
+				return Ratings.find({wine: id}).count();
+			}
+		}
+	})
 	
 	Template.cellar.helpers({
 		nameOf: function(id) {
@@ -66,7 +74,10 @@ if (Meteor.isClient) {
 			var label = container.find('input[name=label]')[0].value;
 			var vintage = container.find('input[name=vintage]')[0].value;
 			
-			Meteor.call("updateWine", this._id, { label: label, vintage: vintage });
+			if (validateModal()) {
+				Meteor.call("updateWine", this._id, { label: label, vintage: vintage });
+				$("#"+this._id).modal("hide");
+			}
 		},
     });
 	
@@ -76,18 +87,21 @@ if (Meteor.isClient) {
 		}
 	});
     
-	Template.createwine.rendered = function() {
-	  Meteor.typeahead.inject();
-	};
+	Template.cellar.onRendered(function() {
+		this.$('.pastYearPicker').datetimepicker( {
+			format: "YYYY",
+			viewMode: "years",
+			maxDate: new Date()
+		});
+	});
   
-  Template.winelist.events({
-	'click #btn-create-wine' : function(e, t) {
-		e.preventDefault();
-		Router.go('createwine');
-		return false;
-    }
-  });
-  
+	Template.winelist.events({
+		'click #btn-create-wine' : function(e, t) {
+			e.preventDefault();
+			Router.go('createwine');
+			return false;
+		}
+	});
 	
 	Template.winelist.rendered = function() {
 		var token = Meteor.user().services.facebook.accessToken;

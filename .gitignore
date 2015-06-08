@@ -40,3 +40,4 @@ $RECYCLE.BIN/
 *.msm
 *.msp
 .settings/settings.json
+*.bat

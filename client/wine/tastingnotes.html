@@ -1,0 +1,79 @@
+<template name="tastingnotes">
+<div class="tasting-notes">
+	<form id="tasting-notes-form" action="action">
+		<div class="form-group">
+			<div>
+				<h2>{{nameOf winery}}</h2>
+				<h3>{{label}} {{vintage}}</h3>
+			</div>
+			
+			<input type="hidden" id="wineId" name="wineId" value="{{_id}}" />
+			
+			<label for="rating" class="control-label">Rating</label>
+			<div class="row">
+				<b class="col-sm-1 col-sm-offset-1">50</b>
+				<div class="col-sm-9">
+					<input class="form-control required slider" name="rating" type="text" placeholder="Rate the wine from 50 to 100" />
+				</div>
+			   	<b class="col-sm-1">100</b>
+		   </div>
+			   
+			<label for="notes" class="control-label">Notes</label>
+			<textarea class="form-control" rows="4" name="notes" placeholder="Add any tasting notes you would like to keep for this wine."></textarea>
+			<p><i>Any information you put here may be made available for other users of this site.</i></p>
+			
+			<input type="submit" id="save-rating" value="Save" class="btn btn-primary" />
+		</div>	
+	</form>
+</div>
+
+<script type="text/javascript">
+	$(function () {
+		$("input.slider").slider({
+			min: 50,
+			max: 100,
+			value: 100,
+			formatter: function(value) {
+				if (value >= 96) {
+					return  'Exceptional: ' + value;
+				} if (value >= 90) {
+					return 'Outstanding: ' + value;
+				} if (value >= 80) {
+					return 'Above average: ' + value;
+				} if (value >= 70) {
+					return 'Average: ' + value;
+				} if (value >= 60) {
+					return 'Below average: ' + value;	
+				}
+				return 'Shithouse: ' + value;
+			},
+			tooltip: 'always'
+		});
+	});
+</script>
+</template>
+
+<template name="viewtastingnotes">
+<div class="tasting-notes">
+	<div>
+		{{#with getWine _id}}
+		<h2>{{nameOf winery}}</h2>
+		<h3>{{label}} {{vintage}}</h3>
+		{{/with}}
+		<h3>Average Rating: {{average ratings}}</h3>
+	</div>
+	
+	{{#each ratings}}
+		<div class="col-lg-4">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				{{userName user}} rated this {{rating}}
+			</div>
+			<div class="panel-body">
+				{{notes}}
+			</div>
+		</div>
+		</div>
+	{{/each}}
+</div>
+</template>

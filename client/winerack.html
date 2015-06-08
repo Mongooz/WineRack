@@ -46,15 +46,18 @@
 			{{#each wines}}
 				<tr><td>{{nameOf winery}}</td><td>{{label}}</td><td>{{vintage}}</td>
 				<td>
+					<a href="{{pathFor 'rate' _id=this._id}}" class="glyphicon glyphicon-heart"></a>
 					{{#if inCellar _id}}
 						In My Cellar
 					{{else}}
-						<a class="btn btn-primary" href="{{pathFor 'addtolist' _id=this._id}}">Add To My List</a>
+						<a class="btn btn-primary" href="{{pathFor 'addtolist' id=this.id}}">Add To My List</a>
 					{{/if}}
-				</td><td>
+				</td>
+				<td>
 					{{#each inFriendsCellar _id}}
 						{{> friend}}
 					{{/each}}
+					{{> ratings}}
 				</td>
 				</tr>
 			{{/each}}
@@ -69,6 +72,14 @@
 	<span>
 		<img src="http://graph.facebook.com/v2.3/{{services.facebook.id}}/picture" title="{{profile.name}} has this wine in {{#if male this}}his{{else}}her{{/if}} cellar." />
 	</span>
+</template>
+
+<template name="ratings">
+	{{#if ratingCount _id}}
+	<span>
+		<a href="{{pathFor 'viewtastingnotes' _id}}">Tasting notes ({{ratingCount _id}})</a>
+	</span>
+	{{/if}}
 </template>
 
 <template name="cellar">
@@ -87,7 +98,7 @@
 					</td>
 					{{/with}}
 					
-					<td>{{fromName from}}</td><td>{{price}}</td><td>{{source}}</td><td class="center"><button class="btn-primary glyphicon-minus takeFromCellar"></button></td><td class="center">{{quantity}}</td><td class="center"><button class="btn-primary glyphicon-plus addToCellar"></button></td>
+					<td>{{fromName from}}</td><td>{{#if price}}${{/if}}{{price}}</td><td>{{source}}</td><td class="center"><button class="btn-primary glyphicon-minus takeFromCellar"></button></td><td class="center">{{quantity}}</td><td class="center"><button class="btn-primary glyphicon-plus addToCellar"></button></td>
 				</tr>
 			{{/each}}
 			</tbody>
@@ -114,21 +125,22 @@
       </div>
       <div class="modal-body">
         <div class="form-group">
-		<label for="label" class="control-label">Label</label>
-		<input class="form-control typeahead required" name="label" type="text"
-		   placeholder="The label of the wine" autocomplete="off" spellcheck="off"
-		   data-source="wines" value="{{label}}" />
-		
-		<label for="vintage" class="control-label">Vintage</label>
-		<div class="input-group pastYearPicker">
-			<input class="set-due-date form-control required" type="text" name="vintage" placeholder="The vintage year of the wine" value="{{vintage}}"  />
-			<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+			<label for="label" class="control-label">Label</label>
+			<input class="form-control typeahead required" name="label" type="text"
+			   placeholder="The label of the wine" autocomplete="off" spellcheck="off"
+			   data-source="wines" value="{{label}}" />
 		</div>
+		<div class="form-group">
+			<label for="vintage" class="control-label">Vintage</label>
+			<div class="input-group pastYearPicker">
+				<input class="form-control required" type="text" name="vintage" placeholder="The vintage year of the wine" value="{{vintage}}"  />
+				<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+			</div>
 	    </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary update" data-dismiss="modal">Save changes</button>
+        <button type="button" class="btn btn-primary update">Save changes</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
