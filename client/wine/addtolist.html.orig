@@ -29,7 +29,11 @@
 			<label for="price" class="control-label">Price Paid</label>
 			<div class="input-group">
 				<span class="input-group-addon"><i class="glyphicon glyphicon-usd"></i></span>
+<<<<<<< HEAD
 				<input class="form-control money" type="text" name="price" placeholder="How much did you pay per bottle" />
+=======
+				<input class="set-due-date form-control money" type="text" name="price" placeholder="How much did you pay per bottle" />
+>>>>>>> origin/dev
 			</div>
 			{{/if}}
 			{{#if gift}}

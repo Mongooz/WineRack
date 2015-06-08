@@ -28,6 +28,8 @@ if (Meteor.isClient) {
     });
 
 	Template.createwine.onRendered(function() {
+	  	Meteor.typeahead.inject();
+		
 		this.$('.pastYearPicker').datetimepicker( {
 			format: "YYYY",
 			viewMode: "years",

@@ -94,6 +94,7 @@ Meteor.methods({
 			notes: notes
 		});
 	}
+<<<<<<< HEAD
 });
 
 validateWine = function(wine, isNew) {
@@ -126,3 +127,6 @@ validateCellar = function(details) {
 	}
 	return true;
 };
+=======
+});
+>>>>>>> origin/dev
