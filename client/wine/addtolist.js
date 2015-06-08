@@ -37,6 +37,8 @@ if (Meteor.isClient) {
 		"submit form": function (event) {
             event.preventDefault();
 			
+			if (!validateForm()) return;
+			
 			var price;
 			if (event.target.price) {
 				price = event.target.price.value;
