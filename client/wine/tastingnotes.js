@@ -19,7 +19,7 @@ if (Meteor.isClient) {
 				event.target.rating.value,
 				event.target.notes.value,
 				function(error, result) {
-					Router.go('cellar');
+					Router.go('home');
 				}
             );
 		}

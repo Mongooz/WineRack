@@ -10,7 +10,11 @@ if (Meteor.isClient) {
 				label: event.target.label.value,
 				vintage: event.target.vintage.value},
 				function(error, result) {
-					Router.go('addtolist', {id: result});
+					if (event.target.next.value == 'cellar') {
+						Router.go('addtolist', {id: result});
+					} else if (event.target.next.value == 'rate') {
+						Router.go('rate', {id: result});
+					}
 				});
 		},
 		"change #from": function (event) {
