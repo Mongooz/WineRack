@@ -8,6 +8,8 @@ Meteor.methods({
 			throw Meteor.Error("The user is currently not authenticated. Please log in and try again.");
 		}
 		
+		validateWine(wine, true);
+		
 		var wineryRecord = Wineries.findOne({name:wine.winery});
 		var wineryId;
 		if (!wineryRecord) {
@@ -38,6 +40,8 @@ Meteor.methods({
 			throw Meteor.Error("You may only manage your own cellar. This feature will be added in a future update.");
 		}
 		
+		validateCellar(details);		
+		
 		Cellars.insert({
 			user: details.user,
 			wine: details.wine,
@@ -66,6 +70,39 @@ Meteor.methods({
 			throw Meteor.Error(error);
 		}
 		
+		validateWine(wine, false);
+		
 		Wines.update({_id: id}, {$set: {label: wine.label, vintage: wine.vintage}});
 	}
-})
+});
+
+validateWine = function(wine, isNew) {
+	if (!wine.label || !wine.vintage || (isNew && !wine.winery)) {
+		throw Meteor.Error("A wine must have a winery, label and vintage.");
+	}
+	
+	var vintage = parseInt(wine.vintage);
+	if (!vintage) {
+		throw Meteor.Error("Please select a valid vintage year.");
+	}
+	if (vintage - 1900 > new Date().getYear()) {
+		throw Meteor.Error("If you have managed to retrieve a wine from the future, please also use the future version of this app.");
+	}
+	return true;
+};
+
+validateCellar = function(details) {
+	if (!details.user || !details.wine) {
+		throw Meteor.Error("Unable to add the wine to your cellar at this time.");
+	}
+	if (details.price && !parseFloat(details.price)) {
+		throw Meteor.Error("Could not save as the price appears to be invalid.");
+	}
+	if (details.acquired && !(new Date(details.acquired))) {
+		throw Meteor.Error("Could not save as the acquired date appears to be invalid.");
+	}
+	if (details.savedate && !(new Date(details.savedate))) {
+		throw Meteor.Error("Could not save as the save for date appears to be invalid.");
+	}
+	return true;
+};
