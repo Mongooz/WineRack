@@ -1,6 +1,7 @@
 Wines = new Mongo.Collection("wines")
 Wineries = new Mongo.Collection("wineries")
 Cellars = new Mongo.Collection("cellars")
+Ratings = new Mongo.Collection("ratings")
 
 // Temporary - migrate to use friendly IDs
 var w = Wines.find({  }).fetch();
@@ -77,5 +78,14 @@ Meteor.methods({
 		}
 		
 		Wines.update({_id: id}, {$set: {label: wine.label, vintage: wine.vintage}});
+	},
+	
+	saveRating: function(id, rating, notes) {
+		Ratings.insert({
+			user: Meteor.userId(),
+			wine: id,
+			rating: rating,
+			notes: notes
+		});
 	}
-})
+});

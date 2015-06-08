@@ -46,15 +46,18 @@
 			{{#each wines}}
 				<tr><td>{{nameOf winery}}</td><td>{{label}}</td><td>{{vintage}}</td>
 				<td>
+					<a href="{{pathFor 'rate' _id=this._id}}" class="glyphicon glyphicon-heart"></a>
 					{{#if inCellar _id}}
 						In My Cellar
 					{{else}}
 						<a class="btn btn-primary" href="{{pathFor 'addtolist' id=this.id}}">Add To My List</a>
 					{{/if}}
-				</td><td>
+				</td>
+				<td>
 					{{#each inFriendsCellar _id}}
 						{{> friend}}
 					{{/each}}
+					{{> ratings}}
 				</td>
 				</tr>
 			{{/each}}
@@ -69,6 +72,14 @@
 	<span>
 		<img src="http://graph.facebook.com/v2.3/{{services.facebook.id}}/picture" title="{{profile.name}} has this wine in {{#if male this}}his{{else}}her{{/if}} cellar." />
 	</span>
+</template>
+
+<template name="ratings">
+	{{#if ratingCount _id}}
+	<span>
+		<a href="{{pathFor 'viewtastingnotes' _id}}">Tasting notes ({{ratingCount _id}})</a>
+	</span>
+	{{/if}}
 </template>
 
 <template name="cellar">
