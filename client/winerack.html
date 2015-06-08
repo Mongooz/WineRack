@@ -46,7 +46,7 @@
 			{{#each wines}}
 				<tr><td>{{nameOf winery}}</td><td>{{label}}</td><td>{{vintage}}</td>
 				<td>
-					<a href="{{pathFor 'rate' _id=this._id}}" class="glyphicon glyphicon-heart"></a>
+					<a href="{{pathFor 'rate' id=this.id}}" class="glyphicon glyphicon-heart"></a>
 					{{#if inCellar _id}}
 						In My Cellar
 					{{else}}
@@ -77,7 +77,7 @@
 <template name="ratings">
 	{{#if ratingCount _id}}
 	<span>
-		<a href="{{pathFor 'viewtastingnotes' _id}}">Tasting notes ({{ratingCount _id}})</a>
+		<a href="{{pathFor 'viewtastingnotes' id}}">Tasting notes ({{ratingCount _id}})</a>
 	</span>
 	{{/if}}
 </template>
