@@ -10,17 +10,17 @@ if (Meteor.isClient) {
 				label: event.target.label.value,
 				vintage: event.target.vintage.value},
 				function(error, result) {
-					Router.go('addtolist', {_id: result});
+					Router.go('addtolist', {id: result});
 				});
 		},
 		"change #from": function (event) {
-			Session.set("from", event.target.value)
+			Session.set("from", event.target.value);
 		},
 		"change #listtype": function (event) {
-			Session.set("consumed", event.target.value == 1)
+			Session.set("consumed", event.target.value == 1);
 		},
 		"blur #winery": function (event) {
-			var winery = Wineries.findOne({name:event.target.value})
+			var winery = Wineries.findOne({name:event.target.value});
 			if (winery) {
 				Session.set("winery", winery._id);
 			}

@@ -2,6 +2,14 @@ Wines = new Mongo.Collection("wines")
 Wineries = new Mongo.Collection("wineries")
 Cellars = new Mongo.Collection("cellars")
 
+// Temporary - migrate to use friendly IDs
+var w = Wines.find({  }).fetch();
+for (i=0;i<w.length;i++) {
+	var wineryRecord = Wineries.findOne({_id:w[i].winery});
+	var id = encodeURI(wineryRecord.name.replace(/[ ]/g, '_') + '_' + w[i].label.replace(/[ ]/g, '_') + '_' + w[i].vintage);
+	Wines.update({_id: w[i]._id}, {$set: {id:id}});
+}
+
 Meteor.methods({
 	createWine: function(wine) {
 		if (!Meteor.userId()) {
@@ -19,13 +27,15 @@ Meteor.methods({
 		var wineRecord = Wines.findOne({winery: wineryId, label: wine.label, vintage: wine.vintage});
 		var wineId;
 		if (!wineRecord) {
-			wineId = Wines.insert({
+			wineId = encodeURI(wine.winery.replace(' ', '_') + '_' + wine.label.replace(' ', '_') + '_' + wine.vintage);
+			Wines.insert({
+				id: wineId,
 				label: wine.label,
 				vintage: wine.vintage,
 				winery: wineryId});
 		} else {
-			wineId = wineRecord._id;
-		}		
+			wineId = wineRecord.id;
+		}
 		return wineId;
 	},
 	
