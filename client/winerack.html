@@ -49,7 +49,7 @@
 					{{#if inCellar _id}}
 						In My Cellar
 					{{else}}
-						<a class="btn btn-primary" href="{{pathFor 'addtolist' _id=this._id}}">Add To My List</a>
+						<a class="btn btn-primary" href="{{pathFor 'addtolist' id=this.id}}">Add To My List</a>
 					{{/if}}
 				</td><td>
 					{{#each inFriendsCellar _id}}

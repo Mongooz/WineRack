@@ -7,7 +7,7 @@ if (Meteor.isClient) {
 	
 	Template.winelist.helpers({
 		wines: function () {
-            return Wines.find({});
+			return Wines.find({});
         },
 		nameOf: function(id) {
 			if (id)
