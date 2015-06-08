@@ -19,7 +19,7 @@ if (Meteor.isClient) {
 		},
 		inFriendsCellar: function(id) {
 			if (id) {
-				var cellars = Cellars.find({wine: id, user: {$ne: Meteor.userId()}}).map(function(it) { return it.user });
+				var cellars = Cellars.find({wine: id, user: {$ne: Meteor.userId()}}).map(function(it) { return it.user; });
 				if (cellars) {
 					return Meteor.users.find({"_id": {$in: cellars }});
 				}
@@ -27,7 +27,7 @@ if (Meteor.isClient) {
 		},
 		friendsCellar: function(id) {
 			if (id) {
-				return Cellars.find({wine: id}).map(function(it) { return it.user });
+				return Cellars.find({wine: id}).map(function(it) { return it.user; });
 			}
 		}
     });
@@ -62,6 +62,9 @@ if (Meteor.isClient) {
 			
 			var qty = parseInt(this.quantity) - 1;
 			Meteor.call("updateQuantity", this._id, qty);
+			
+			var wine = Wines.findOne({_id: this.wine});
+			Flash.success('__default__', 'You have successfully removed a wine from your cellar! Would you like to <a href="'+ Router.path('rate', { id: wine.id }) + '">add tasting notes</a>?');
 		},
 		"click .addToCellar": function (event) {
             event.preventDefault();
