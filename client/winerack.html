@@ -87,7 +87,7 @@
 					</td>
 					{{/with}}
 					
-					<td>{{fromName from}}</td><td>{{price}}</td><td>{{source}}</td><td class="center"><button class="btn-primary glyphicon-minus takeFromCellar"></button></td><td class="center">{{quantity}}</td><td class="center"><button class="btn-primary glyphicon-plus addToCellar"></button></td>
+					<td>{{fromName from}}</td><td>{{#if price}}${{/if}}{{price}}</td><td>{{source}}</td><td class="center"><button class="btn-primary glyphicon-minus takeFromCellar"></button></td><td class="center">{{quantity}}</td><td class="center"><button class="btn-primary glyphicon-plus addToCellar"></button></td>
 				</tr>
 			{{/each}}
 			</tbody>
