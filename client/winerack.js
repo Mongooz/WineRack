@@ -19,7 +19,7 @@ if (Meteor.isClient) {
 		},
 		inFriendsCellar: function(id) {
 			if (id) {
-				var cellars = Cellars.find({wine: id, user: {$ne: Meteor.userId()}}).map(function(it) { return it.user });
+				var cellars = Cellars.find({wine: id, user: {$ne: Meteor.userId()}}).map(function(it) { return it.user; });
 				if (cellars) {
 					return Meteor.users.find({"_id": {$in: cellars }});
 				}
@@ -27,7 +27,7 @@ if (Meteor.isClient) {
 		},
 		friendsCellar: function(id) {
 			if (id) {
-				return Cellars.find({wine: id}).map(function(it) { return it.user });
+				return Cellars.find({wine: id}).map(function(it) { return it.user; });
 			}
 		}
     });
@@ -53,6 +53,36 @@ if (Meteor.isClient) {
 			if (from == 2)
 				return "Gift";
 			return "Purchase";
+		},
+		getCellarTitle: function(cellar) {
+			if (cellar && cellar.length > 0) {
+				var id = cellar[0].user;
+				if (id == Meteor.userId()) {
+					return "My Cellar";
+				}
+				var user = Meteor.users.findOne({_id: id});
+				if (user) {
+					return user.profile.name + '\'s Cellar';
+				}
+			}
+		},
+		users: function() {
+			var users = Meteor.users.find({'services.facebook': {$exists: true}, _id: { $ne: Meteor.userId() }}).fetch();
+			
+			return users.map(function(it) {
+				var shared = SharedCellars.findOne({user: it._id});
+				return { services: it.services, profile: it.profile, shared: shared };
+			});
+		},
+		isOwner: function(cellar) {
+			if (cellar && cellar.length > 0) {
+				var id = cellar[0].user;
+				if (id == Meteor.userId()) {
+					return true;
+				}
+				return false;
+			}
+			return false;
 		}
     });
 	
@@ -62,6 +92,9 @@ if (Meteor.isClient) {
 			
 			var qty = parseInt(this.quantity) - 1;
 			Meteor.call("updateQuantity", this._id, qty);
+			
+			var wine = Wines.findOne({_id: this.wine});
+			Flash.success('__default__', 'You have successfully removed a wine from your cellar! Would you like to <a href="'+ Router.path('rate', { id: wine.id }) + '">add tasting notes</a>?');
 		},
 		"click .addToCellar": function (event) {
             event.preventDefault();
@@ -79,6 +112,25 @@ if (Meteor.isClient) {
 				$("#"+this._id).modal("hide");
 			}
 		},
+		"click .share": function (event) {
+			event.target.disabled = true;
+			var container = $(event.target).parent();
+			var toEmail = container.find('input[name=toEmail]')[0].value;
+			
+			if (toEmail.length == 0) {  
+				Flash.danger("Please specify an email address.");
+				return false;
+			} else if (toEmail.indexOf('@') < 0 || toEmail.indexOf('.') < 0) {
+				Flash.danger("The email is in an invalid format.");
+				return false;
+			}
+			 
+			Meteor.call("shareCellar", toEmail);
+			
+			Flash.success("The email has been sent. It may take a little while before it appears in your friend's inbox.");
+			container.find('input[name=toEmail]')[0].val('');
+			event.target.disabled = false;
+		}
     });
 	
 	Template.friend.helpers({
@@ -113,4 +165,15 @@ if (Meteor.isClient) {
 			}
 		});
 	};
+	
+	Template.nav.helpers({
+		cellars: function() {
+			return SharedCellars.find({user: Meteor.userId()}).fetch().map(function(it) {
+				var user = Meteor.users.findOne({_id: it.cellar});
+				if (user) {
+					return {title: user.profile.name + '\'s Cellar', user: user._id };
+				}
+			});
+		}
+    });
 }

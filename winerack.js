@@ -1,7 +1,15 @@
-Wines = new Mongo.Collection("wines")
-Wineries = new Mongo.Collection("wineries")
-Cellars = new Mongo.Collection("cellars")
-Ratings = new Mongo.Collection("ratings")
+Wines = new Mongo.Collection("wines");
+Wineries = new Mongo.Collection("wineries");
+Cellars = new Mongo.Collection("cellars");
+Ratings = new Mongo.Collection("ratings");
+SharedCellars = new Mongo.Collection("sharedCellars");
+
+if (Meteor.isServer){
+	Cellars.find({price: {$regex:'[$]'} }).fetch().map(function (it) { 
+		Cellars.update(it._id, {$set: {price: it.price.substring(1)}});
+		return it; 
+	});
+}
 
 Meteor.methods({
 	createWine: function(wine) {
@@ -40,7 +48,9 @@ Meteor.methods({
 		}
 		
 		if (details.user != Meteor.userId()){
-			throw Meteor.Error("You may only manage your own cellar. This feature will be added in a future update.");
+			if (!SharedCellars.findOne({cellar: details.user, user: Meteor.userId()})) {
+				throw Meteor.Error("You do not have permission to add wines to this cellar.");
+			}
 		}
 		
 		validateCellar(details);		
@@ -85,6 +95,46 @@ Meteor.methods({
 			rating: rating,
 			notes: notes
 		});
+	},
+	
+	shareCellar: function(toEmail) {
+		check([toEmail], [String]);
+		
+		if (toEmail.length == 0) {  
+			throw Meteor.Error("Email is required.");
+		}
+		if (toEmail.indexOf('@') < 0 || toEmail.indexOf('.') < 0) {
+			throw Meteor.Error("The email is in an invalid format.");
+		}
+		
+		var shareId = SharedCellars.insert({cellar: Meteor.userId()});
+		
+		if (Meteor.isServer) {
+			// send and email with the link...
+			var path = 'http://winerack.meteor.com' + Router.path('acceptsharedcellar', {id: shareId});
+			this.unblock();
+			
+			var owner = Meteor.user().profile.name;
+		    Email.send({
+		      to: toEmail,
+		      from: 'noreply@TheWineRack.Meteor.com',
+		      subject: 'You\'ve been invited to join ' + owner + '\'s cellar',
+			  html:
+			  '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>You\'ve been invited to join The Wine Rack</title><meta name="viewport" content="width=device-width, initial-scale=1.0"/></head><body style="margin: 0; padding: 0;"><table border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td><table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse;"><tr><td align="center" bgcolor="#ffffff" style="padding: 20px 0 20px 0;"><img src="http://winerack.meteor.com/ms-icon-150x150.png" alt="The Wine Rack" width="150" height="150" style="display: block;" /></td></tr><tr><td bgcolor="#ffffff" style="padding: 40px 30px 40px 30px; color: black;"><table border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td> You\'ve been invited to join ' 
+			  +owner+
+			  '\'s cellar! </td></tr><tr><td style="padding: 20px 0 20px 0;">'
+			  +owner+
+			  'has generously allowed you full access to contribute to their cellar. </td></tr><tr><td style="padding: 20px 0 20px 0;"> After you\'ve created your account, you can accept the share by going to this unique link <a href="'
+			  +path+
+			  '">'
+			  +path+
+			  '</a>. </td></tr></table></td></tr><tr ><td bgcolor="#ffffff" style="padding: 30px 30px 30px 30px; color: black;"><table border="0" cellpadding="0" cellspacing="0" width="100%"><td width="75%"> To get started, <a href="http://winerack.meteor.com">sign up for a free account</a>. </td><td align="right"></td></table></td></tr></table></td></tr></table></body></html>'
+		    });
+		}
+	},
+	
+	acceptShare: function(id) {
+		SharedCellars.update({_id: id}, {$set: {user: Meteor.userId()}});
 	}
 });
 

@@ -84,7 +84,15 @@
 
 <template name="cellar">
 <div class="jumbotron main-content">
-	<h2>My Cellar</h2>
+	<h2>{{getCellarTitle this}}</h2>
+	
+	{{#if isOwner this}}
+		<div class="form-group form-inline pull-right" style="margin-top:-50px;">
+			<input type="email" class="form-control required" name="toEmail" placeholder="Share By Email" />
+			<button class="btn btn-primary share" title="This will allow others to contribute to your cellar">Share</button>
+		</div>
+	{{/if}}
+	
 	<div class="table-responsive">
         <table class="table">
 			<tbody>
@@ -163,7 +171,16 @@
 			<ul class="nav navbar-nav">
 				<li class="{{isActiveRoute regex='home'}}"><a href="/">Home</a></li>
 				{{#if currentUser}}
-				<li class="{{isActiveRoute regex='cellar'}}"><a href="/Cellar">My Cellar</a></li>
+				<li class="{{#if cellars}}dropdown{{/if}} {{isActiveRoute regex='cellar'}}"><a class="{{#if cellars}}dropdown-toggle{{/if}}" data-toggle="{{#if cellars}}dropdown{{/if}}" role="button" aria-expanded="false" href="/Cellar">Cellar</a>
+					{{#if cellars}}
+					<ul class="dropdown-menu">
+						<li class=""><a href="/Cellar">My Cellar</a></li>
+						{{#each cellars}}
+							<li class=""><a href="{{pathFor 'sharedcellar' id=this.user}}">{{title}}</a></li>
+						{{/each}}
+					</ul>
+					{{/if}}
+				</li>
 				{{/if}}
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
