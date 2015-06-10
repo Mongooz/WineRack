@@ -124,7 +124,7 @@ Meteor.methods({
 			  +owner+
 			  '\'s cellar! </td></tr><tr><td style="padding: 20px 0 20px 0;">'
 			  +owner+
-			  'has generously allowed you full access to contribute to their cellar. </td></tr><tr><td style="padding: 20px 0 20px 0;"> After you\'ve created your account, you can accept the share by going to this unique link <a href="'
+			  ' has generously allowed you full access to contribute to their cellar. </td></tr><tr><td style="padding: 20px 0 20px 0;"> After you\'ve created your account, you can accept the share by going to this unique link <a href="'
 			  +path+
 			  '">'
 			  +path+
