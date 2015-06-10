@@ -10,6 +10,14 @@
 			
 			<input type="hidden" id="wineId" name="wineId" value="{{_id}}" />
 			
+			<label for="cellar" class="control-label">Select Cellar</label>
+			<select id="cellar" name="cellar" class="form-control">
+				<option value="">My Cellar</option>
+				{{#each sharedCellars}}
+				<option value="{{id}}">{{title}}</option>
+				{{/each}}
+			</select>
+			
 			<label for="from" class="control-label">Acquired By</label>
 			<select id="from" name="from" class="form-control">
 				<option value="1">Purchase</option>

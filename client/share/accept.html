@@ -1,0 +1,20 @@
+<template name="acceptsharedcellar">
+	<div class="accept-share">
+		{{#if expired}}
+		<div class="form-group">
+			<h2>Share Has Expired</h2>
+			<p>Unfortunately the invitation to collaborate on this cellar has expired.</p>
+			<p>If you feel you are receiving this message in error, please contact the Wine Rack administation team. In the meantime, feel free to explore the site and perhaps create your own cellar.</p>
+		</div>
+		{{else}}
+			{{#if currentUser}}
+				{{acceptShare }}
+			{{else}}
+			<div class="form-group">
+				<h2>Sign in to continue...</h2>
+				{{> loginButtons}}
+			</div>
+			{{/if}}
+		{{/if}}
+	</div>
+</template>
