@@ -53,6 +53,36 @@ if (Meteor.isClient) {
 			if (from == 2)
 				return "Gift";
 			return "Purchase";
+		},
+		getCellarTitle: function(cellar) {
+			if (cellar && cellar.length > 0) {
+				var id = cellar[0].user;
+				if (id == Meteor.userId()) {
+					return "My Cellar";
+				}
+				var user = Meteor.users.findOne({_id: id});
+				if (user) {
+					return user.profile.name + '\'s Cellar';
+				}
+			}
+		},
+		users: function() {
+			var users = Meteor.users.find({'services.facebook': {$exists: true}, _id: { $ne: Meteor.userId() }}).fetch();
+			
+			return users.map(function(it) {
+				var shared = SharedCellars.findOne({user: it._id});
+				return { services: it.services, profile: it.profile, shared: shared };
+			});
+		},
+		isOwner: function(cellar) {
+			if (cellar && cellar.length > 0) {
+				var id = cellar[0].user;
+				if (id == Meteor.userId()) {
+					return true;
+				}
+				return false;
+			}
+			return false;
 		}
     });
 	
@@ -82,6 +112,25 @@ if (Meteor.isClient) {
 				$("#"+this._id).modal("hide");
 			}
 		},
+		"click .share": function (event) {
+			event.target.disabled = true;
+			var container = $(event.target).parent();
+			var toEmail = container.find('input[name=toEmail]')[0].value;
+			
+			if (toEmail.length == 0) {  
+				Flash.danger("Please specify an email address.");
+				return false;
+			} else if (toEmail.indexOf('@') < 0 || toEmail.indexOf('.') < 0) {
+				Flash.danger("The email is in an invalid format.");
+				return false;
+			}
+			 
+			Meteor.call("shareCellar", toEmail);
+			
+			Flash.success("The email has been sent. It may take a little while before it appears in your friend's inbox.");
+			container.find('input[name=toEmail]')[0].val('');
+			event.target.disabled = false;
+		}
     });
 	
 	Template.friend.helpers({
@@ -116,4 +165,15 @@ if (Meteor.isClient) {
 			}
 		});
 	};
+	
+	Template.nav.helpers({
+		cellars: function() {
+			return SharedCellars.find({user: Meteor.userId()}).fetch().map(function(it) {
+				var user = Meteor.users.findOne({_id: it.cellar});
+				if (user) {
+					return {title: user.profile.name + '\'s Cellar', user: user._id };
+				}
+			});
+		}
+    });
 }
